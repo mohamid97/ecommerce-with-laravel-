@@ -9,6 +9,8 @@ return
   'category'=>'القسم',
   'purchasePrice'=>'السعر',
   'stockNumber'=>'الكميه',
+  'address'=>'العنوان',
+  'phone'=>'رقم الهاتف',
   'name_ar'=>'الإسم باللغه العربيه',
   'name_en'=>'الإسم باللغه الإنجليزيه',
   'description_ar'=>'الوصف باللغه العربيه',
@@ -39,12 +41,18 @@ return
   'edit_product_successfully'=>'تم تعديل المنتج بنجاح',
 
 
+  'created_clients_successfully'=>'تم إضافة المنتج بنجاح',
+  'delete_clients_successfully'=>'تم حذف المنتج بنجاح',
+  'edit_clients_successfully'=>'تم تعديل المنتج بنجاح',
+
+
 
   'role'=>'الصلاحيات',
   'noData'=>'للأسف لا توجد بيانات',
   'total_users'=>'إجمالي المشرفين :',
   'total_categories'=>'إجمالي الأقسام ',
   'total_products'=>'إجمالي البمنتجات',
+  'total_clients'=>'إجمالي العملاء'
 
   
   

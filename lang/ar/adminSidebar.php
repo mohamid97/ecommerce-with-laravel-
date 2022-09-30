@@ -4,6 +4,7 @@ return [
     'dashboard'=>'الرئيسيه',
     'users'=>'المشرفين',
     'categories'=>'الأقسام',
-    'products'=>'المنتجات'
+    'products'=>'المنتجات',
+    'clients'=>'العملاء'
 
 ];

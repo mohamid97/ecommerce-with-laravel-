@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Site\HomeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -12,7 +13,18 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::group([
 
-Route::get('/', function () {
-    return view('welcome');
-});
+    /** localization for langs */
+    'prefix' => LaravelLocalization::setLocale(),
+    'middleware' => [ 'localeSessionRedirect', 'localizationRedirect', 'localeViewPath' ]
+], 
+    function(){
+
+        /* frontend routes */
+        Route::get('/', [HomeController::class , 'index'])->name('home');
+        Route::get('category/{id}' , [HomeController::class , 'getCategory'])->name('categories');
+        Route::get('search/' , [HomeController::class , 'search'])->name('search');
+        
+
+    }); 

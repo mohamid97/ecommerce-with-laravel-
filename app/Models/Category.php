@@ -18,6 +18,11 @@ class Category extends Model implements TranslatableContract
      public function products(){
           return $this->hasMany(Product::class , 'category_id');
      }
+     /* check if category not empty  */
+   public static function  getALLCats(){
+     $cats = self::all();
+     return $cats;
+   }
    
 
 }

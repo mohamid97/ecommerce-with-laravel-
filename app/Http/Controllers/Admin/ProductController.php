@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Product;
+use GuzzleHttp\Psr7\UploadedFile;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -46,19 +47,29 @@ class ProductController extends Controller
           'ar.*'=>'required|string',
           'en.*'=>'required',
           'stockNumber'=>'required|integer',
-          'purchasePrice'=>'required'
-        ]);
-        Product::create([
-            'en.name'=>$request->en['name'],
-            'en.des'=>$request->en['des'],
-            'ar.name'=>$request->ar['name'],
-            'ar.des'=>$request->ar['des'],
-            'category_id'=>$request->category,
-            'stockNumber'=>$request->stockNumber,
-            'purchasePrice'=>$request->purchasePrice
-           
+          'purchasePrice'=>'required',
+          'image'         =>'required|image||max:12288|mimes:jpeg,png,jpg'
         ]);
 
+        $imageName = time()."_.". $request->image->extension();
+        $request->image->move(public_path('productsImages') , $imageName);
+
+        Product::create([
+            'en'=>[
+                   'name'=>$request->en['name'],
+                   'des'=>$request->en['des']
+            ],
+            'ar'=>[
+                   'name'=>$request->ar['name'],
+                   'des'=>$request->ar['des']    
+                  ],
+            'category_id'=>$request->category,
+            'stockNumber'=>$request->stockNumber,
+            'purchasePrice'=>$request->purchasePrice,
+            'image'=>$imageName
+           
+        ]);
+ 
         session()->flash('success' , __('static.created_product_successfully'));
         return redirect()->route('dashboard.products.index');
 
@@ -83,7 +94,8 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-        return view('admin.products.edit' , compact('product'));
+        $cats = Category::all();
+        return view('admin.products.edit' , compact('product' , 'cats'));
     }
 
     /**
@@ -96,9 +108,24 @@ class ProductController extends Controller
     public function update(Request $request, Product $product)
     {
         $request->validate([
-
-        ]);
+            'category'=>'required|integer',
+            'ar.*'=>'required|string',
+            'en.*'=>'required',
+            'stockNumber'=>'required|integer',
+            'purchasePrice'=>'required'
+          ]);
         $product->update([
+                'en'=>[
+                    'name'=>$request->en['name'],
+                    'des'=>$request->en['des']
+                ],
+                'ar'=>[
+                    'name'=>$request->ar['name'],
+                    'des'=>$request->ar['des']    
+                    ],
+                'category_id'=>$request->category,
+                'stockNumber'=>$request->stockNumber,
+                'purchasePrice'=>$request->purchasePrice
           ]);
     
            session()->flash('success' , __('static.edit_product_successfully'));
@@ -113,6 +140,12 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
+        if(is_file(public_path('productsImages/').$product->image)){
+            unlink(public_path('productsImages/').$product->image);
+        }else{
+           // dd(public_path('productsImages/').$product->imag);
+        }
+ 
         $product->delete();
         session()->flash('success' , __('static.delete_product_successfully'));
         return  redirect()->route('dashboard.products.index');

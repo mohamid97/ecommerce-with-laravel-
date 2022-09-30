@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\HomeController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\ClientController;
 use App\Http\Controllers\Admin\ProductController;
 
 ;
@@ -27,6 +28,7 @@ Route::group([
     Route::get('/dashboard/login' , [AuthController::class , 'index'])->name('dashboard.login');
     Route::post('/dashboard/login' , [AuthController::class , 'checkAuth'])->name('dashboard.checkLogin');
     Route::prefix('dashboard')->name('dashboard.')->middleware('auth')->group(function(){
+        Route::resource('clients' ,ClientController::class)->except('show');
         Route::resource('products' , ProductController::class);
         Route::resource('categories' ,CategoryController::class)->except('show');
         Route::resource('users' ,UserController::class)->except('show'); 
